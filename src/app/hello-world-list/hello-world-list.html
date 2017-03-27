@@ -1,0 +1,8 @@
+<ul class="list">
+    <li *ngFor="let phrase of phraseList" (click)="onSelect(phrase)">
+       {{ phrase.value }}
+    </li>
+</ul>
+<div *ngIf="selectedPhraseLanguage">
+    Select language: {{ selectedPhraseLanguage }}
+</div>
