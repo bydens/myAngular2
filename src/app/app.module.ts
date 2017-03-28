@@ -1,17 +1,12 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
 
 import { AppComponent }  from './app.component';
-import { ListsModule, routs } from './lists/index';
+import { MyTable } from './my-table/my-table.component'
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        ListsModule,
-        RouterModule.forRoot(routs)
-    ],
-    declarations: [ AppComponent ],
+    imports: [ BrowserModule ],
+    declarations: [ AppComponent, MyTable ],
     bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
