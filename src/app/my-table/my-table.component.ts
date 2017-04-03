@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Products } from './products';
+import { Component, OnInit, Inject } from '@angular/core';
+import { Products } from '../services/products';
+import { MyService } from '../services/app.service';
 
 const PRODUCTS: Products[] = [
     { id: 1, name : 'product 1', category: 1, price : 100 },
@@ -19,13 +20,18 @@ const PRODUCTS: Products[] = [
     selector: 'my-table',
     templateUrl: 'my-table.component.html',
     styleUrls: ['my-table.component.css'],
+    providers: [MyService],
     inputs: ['rows']
 })
 export class MyTable implements OnInit {
     rows: number;
     category: string;
+    categoryProd: string;
+    name: string;
+    price: string;
     product: Products;
     ProductList: Products[];
+    constructor(private prodServ: MyService) {};
     ngOnInit() {
         this.prodCopy();
     }
@@ -36,7 +42,8 @@ export class MyTable implements OnInit {
         }
     }
     prodCopy() {
-        this.ProductList = Object.assign([], PRODUCTS).splice(0, this.rows);
+        // this.ProductList = Object.assign([], PRODUCTS).splice(0, this.rows);
+        this.ProductList = Object.assign([], this.prodServ.getProdicts()).splice(0, this.rows);
     }
     getCategory(categ: string): void {
         // console.log(categ);
@@ -47,9 +54,11 @@ export class MyTable implements OnInit {
         this.ProductList = Object.assign([], PRODUCTS).filter(item => item.category === parseInt(categ, 10));
     }
     addProduct(categ: string): void {
-        this.product['id'] = PRODUCTS.length + 1;
-        this.product['price'] = parseInt(this.product['price'], 10);
-        this.product['category'] = parseInt(this.product['category'], 10);
+        // console.log(categ);
+        this.product.id = PRODUCTS.length + 1;
+        this.product['name'] = this.name;
+        this.product['price'] = parseInt(this.price, 10);
+        this.product['category'] = parseInt(this.categoryProd, 10);
         console.log(this.product);
         PRODUCTS.push(this.product);
         this.getCategory(categ);
