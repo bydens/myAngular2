@@ -1,4 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Products } from '../services/products';
 import { MyService } from '../services/app.service';
 
@@ -25,42 +26,35 @@ const PRODUCTS: Products[] = [
 })
 export class MyTable implements OnInit {
     rows: number;
-    category: string;
-    categoryProd: string;
-    name: string;
-    price: string;
-    product: Products;
     ProductList: Products[];
     constructor(private prodServ: MyService) {};
     ngOnInit() {
         this.prodCopy();
     }
     delProd(product: Products): void {
-        let index = this.ProductList.indexOf(product);
+        const index = this.ProductList.indexOf(product);
         if (index !== -1) {
             this.ProductList.splice(index, 1);
         }
     }
     prodCopy() {
-        // this.ProductList = Object.assign([], PRODUCTS).splice(0, this.rows);
-        this.ProductList = Object.assign([], this.prodServ.getProdicts()).splice(0, this.rows);
+        this.ProductList = Object.assign([], PRODUCTS).splice(0, this.rows);
+        // this.ProductList = Object.assign([], this.prodServ.getProdicts()).splice(0, this.rows);
     }
     getCategory(categ: string): void {
-        // console.log(categ);
-        // console.log(this.category);
         if (!categ) {
             this.prodCopy();
         }
-        this.ProductList = Object.assign([], PRODUCTS).filter(item => item.category === parseInt(categ, 10));
+        this.ProductList = Object.assign([], PRODUCTS).filter(item => item.category === +categ);
     }
-    addProduct(categ: string): void {
-        // console.log(categ);
-        this.product.id = PRODUCTS.length + 1;
-        this.product['name'] = this.name;
-        this.product['price'] = parseInt(this.price, 10);
-        this.product['category'] = parseInt(this.categoryProd, 10);
-        console.log(this.product);
-        PRODUCTS.push(this.product);
+    addProduct(form: NgForm, categ: string): void {
+        const newProduct: Products = new Products();
+        newProduct.id = PRODUCTS.length + 1;
+        newProduct.name = form.value.name;
+        newProduct.category = +form.value.category;
+        newProduct.price = +form.value.price;
+        PRODUCTS.push(newProduct);
+        this.prodCopy();
         this.getCategory(categ);
     }
 }
